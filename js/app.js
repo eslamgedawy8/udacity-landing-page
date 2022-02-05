@@ -22,7 +22,7 @@
  * Define Global Variables
  * 
 */
-var list = document.getElementById('navbar__list')
+let list = document.getElementById('navbar__list')
 const sections = document.querySelectorAll('[data-nav]')
 const viewHeight = document.documentElement.clientHeight
 /**
@@ -40,13 +40,8 @@ function removeClass(element, className) {
 }
 
 const isInViewport = (element) => {
-    const distance = element.getBoundingClientRect()
-    return (
-        distance.top >= 0 &&
-        distance.left >= 0 &&
-        distance.bottom <= window.innerHeight &&
-        distance.right <= window.innerWidth
-    )
+    const rect = element.getBoundingClientRect()
+    return rect.top >= -70 && rect.top < 200
 }
 
 /**
@@ -55,28 +50,26 @@ const isInViewport = (element) => {
  *
 */
 
-// create unordered list
+// create unordered list and add scroll behavior using js 
 sections.forEach(section => {
-    var li = document.createElement('li')
-    var a = document.createElement('a')
+    let li = document.createElement('li')
+    let a = document.createElement('a')
     a.setAttribute('href', `#${section.id}`)
     a.setAttribute('class', 'menu__link')
     a.appendChild(document.createTextNode(`${section.dataset.nav}`))
     li.appendChild(a)
     list.appendChild(li)
+    li.addEventListener('click', function (e) {
+        e.preventDefault()
+        let link = a.getAttribute('href')
+        document.querySelector(link).scrollIntoView({
+            behavior: 'smooth',
+            block: "end",
+            inline: "nearest"
+        })
+    })
 })
 
-/* another way to create unordered list
-    for (let i = 1; i <= sections.length; i++) {
-        var li = document.createElement('li')
-        var a = document.createElement('a')
-        a.setAttribute('href', `#section${i}`)
-        a.setAttribute('class', 'menu__link')
-        a.appendChild(document.createTextNode(`Section ${i}`))
-        li.appendChild(a)
-        list.appendChild(li)
-    }
-*/
 
 function mainFunc() {
     // loop through all sections 
